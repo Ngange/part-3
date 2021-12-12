@@ -50,13 +50,32 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
+const nameExist = (name) => {
+  return (
+    persons.some(person => person.name.toLowerCase() === name.toLowerCase() )
+  )
+}
+
 app.post('/api/persons', (request, response) => {
   const body = request.body
   const id = Math.floor(Math.random()* 500)
-
   const contact = {"id": id, ...body}
-  persons = persons.concat(contact)
-  response.json(contact)
+  console.log(!contact.name);
+
+  if (!contact.name || !contact.number) {
+    return response.status(400).json({
+      error: 'name or number cannot be empty!'
+    })
+  } else if (nameExist(contact.name)) {
+    return response.status(400).json({
+      error: 'name must be unique'
+    })
+  } else {
+    persons = persons.concat(contact)
+
+    response.json(contact)
+  }
+  
 })
 
 app.delete('/api/persons/:id', (request, response) => {
