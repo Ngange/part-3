@@ -1,4 +1,4 @@
-const { request } = require('express')
+const { request, response } = require('express')
 const express = require('express')
 const app = express()
 
@@ -34,6 +34,18 @@ app.get('/info', (request, response) => {
   const date = new Date()
 
   response.send(`Phonebook has info for ${contacts} people <br/><br/> ${date}`)
+})
+
+app.get('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  console.log(id, typeof id);
+  const person = persons.find(person => person.id === id)
+
+  if (person) {
+    response.json(person)
+  } else {
+    response.status(404).end()
+  }
 })
 
 const PORT = 3001
