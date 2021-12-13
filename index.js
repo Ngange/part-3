@@ -4,6 +4,9 @@ const app = express()
 const morgan = require('morgan')
 
 app.use(express.json())
+
+//token for request body
+morgan.token('body', (req, res) => JSON.stringify(req.body));
 app.use(morgan('tiny'))
 
 let persons = [
@@ -58,7 +61,7 @@ const nameExist = (name) => {
   )
 }
 
-app.post('/api/persons', (request, response) => {
+app.post('/api/persons', morgan(':body'), (request, response) => {
   const body = request.body
   const id = Math.floor(Math.random()* 500)
   const contact = {"id": id, ...body}
