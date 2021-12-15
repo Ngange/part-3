@@ -11,3 +11,22 @@ Content-Type: application/json
     "name": "Baboucarr Sallah",
     "number": 729874363
 }
+
+
+###
+requests for to the heroku server on the internet.
+
+###
+POST https://secret-tundra-98217.herokuapp.com/api/persons
+Content-Type: application/json
+
+{
+    "name": "Baboucarr Sallah",
+    "number": 729874363
+}
+
+###
+GET https://secret-tundra-98217.herokuapp.com/api/persons
+
+###
+GET https://secret-tundra-98217.herokuapp.com/api/persons/2
