@@ -10,7 +10,7 @@ app.use(cors())
 app.use(express.static('build'))
 
 //token for request body
-morgan.token('body', (request, response) => JSON.stringify(req.body));
+morgan.token('body', (request, response) => JSON.stringify(request.body));
 app.use(morgan('tiny'))
 
 let persons = [
@@ -61,32 +61,23 @@ app.get('/api/persons/:id', (request, response) => {
   }
 })
 
-const nameExist = (name) => {
-  return (
-    persons.some(person => person.name.toLowerCase() === name.toLowerCase() )
-  )
-}
-
 app.post('/api/persons', morgan(':body'), (request, response) => {
   const body = request.body
-  const id = Math.floor(Math.random()* 500)
-  const contact = {"id": id, ...body}
-  console.log(!contact.name);
-
-  if (!contact.name || !contact.number) {
+  
+  if (!body.name || !body.number) {
     return response.status(400).json({
       error: 'name or number cannot be empty!'
     })
-  } else if (nameExist(contact.name)) {
-    return response.status(400).json({
-      error: 'name must be unique'
-    })
-  } else {
-    persons = persons.concat(contact)
-
-    response.json(contact)
   }
-  
+
+  const person = new Person({
+    name: body.name,
+    number: body.number,
+  })
+
+  person.save().then(saved => {
+    response.json(saved)
+  })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
