@@ -76,11 +76,11 @@ app.get('/api/persons/:id', (request, response, next) => {
 app.post('/api/persons', morgan(':body'), (request, response, next) => {
   const body = request.body
   
-  if (!body.name || !body.number) {
-    return response.status(400).json({
-      error: 'name or number cannot be empty!'
-    })
-  }
+  // if (!body.name || !body.number) {
+  //   return response.status(400).json({
+  //     error: 'name or number cannot be empty!'
+  //   })
+  // }
 
   const person = new Person({
     name: body.name,
@@ -108,7 +108,7 @@ app.put('/api/persons/:id', (request, response, next) => {
     number: body.number,
   }
 
-  Person.findByIdAndUpdate(request.params.id, person, { new: true})
+  Person.findByIdAndUpdate(request.params.id, person, { runValidators: true, context: 'query', new: true })
     .then(updated => {
       response.json(updated)
     })

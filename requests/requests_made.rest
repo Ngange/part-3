@@ -15,6 +15,14 @@ Content-Type: application/json
     "number": 729874363
 }
 
+###
+PUT http://localhost:3001/api/persons/61c8229c9693b33eea0070e9
+Content-Type: application/json
+
+{
+    "name": "Baboucarr Sallah",
+    "number": 4746521433
+}
 
 ###
 requests for to the heroku server on the internet.
