@@ -5,9 +5,9 @@ const morgan = require('morgan')
 const cors = require('cors')
 const Person = require('./models/persons')
 
+app.use(express.static('build'))
 app.use(express.json())
 app.use(cors())
-app.use(express.static('build'))
 
 //token for request body
 morgan.token('body', (request, response) => JSON.stringify(request.body));
@@ -81,10 +81,14 @@ app.post('/api/persons', morgan(':body'), (request, response) => {
 })
 
 app.delete('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  persons = persons.filter(person => person.id !== id)
-
-  response.status(204).end()
+  Person.findByIdAndRemove(request.params.id)
+    .then(result => {
+      response.status(204).end()
+    })
+    .catch(error => {
+      console.log(error)
+      response.status(400).send({ error: 'mal-formatted id' })
+    })
 })
 
 const PORT = process.env.PORT || 3001
